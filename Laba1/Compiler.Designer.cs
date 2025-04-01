@@ -1,6 +1,6 @@
 ﻿namespace Laba1
 {
-    partial class Form1
+    partial class Compiler
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Compiler));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.menuFile = new System.Windows.Forms.ToolStripDropDownButton();
             this.создатьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,17 +71,20 @@
             this.toolStripButtonAbout = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.dataGridViewoutput = new System.Windows.Forms.DataGridView();
+            this.textBoxErrors = new System.Windows.Forms.RichTextBox();
             this.toolStrip1.SuspendLayout();
             this.toolStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewoutput)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStrip1
             // 
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuFile,
@@ -91,7 +94,7 @@
             this.toolStripDropDownButton5});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(940, 27);
+            this.toolStrip1.Size = new System.Drawing.Size(331, 31);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -156,7 +159,7 @@
             this.pravka.Image = ((System.Drawing.Image)(resources.GetObject("pravka.Image")));
             this.pravka.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.pravka.Name = "pravka";
-            this.pravka.Size = new System.Drawing.Size(74, 24);
+            this.pravka.Size = new System.Drawing.Size(74, 28);
             this.pravka.Text = "Правка";
             // 
             // отменитьToolStripMenuItem
@@ -282,6 +285,7 @@
             this.toolStripDropDownButton4.Name = "toolStripDropDownButton4";
             this.toolStripDropDownButton4.Size = new System.Drawing.Size(45, 28);
             this.toolStripDropDownButton4.Text = "Пуск";
+            this.toolStripDropDownButton4.Click += new System.EventHandler(this.toolStripDropDownButton4_Click);
             // 
             // toolStripDropDownButton5
             // 
@@ -311,6 +315,7 @@
             // 
             // toolStrip2
             // 
+            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip2.ImageScalingSize = new System.Drawing.Size(40, 40);
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonNew,
@@ -326,7 +331,7 @@
             this.toolStripButtonAbout});
             this.toolStrip2.Location = new System.Drawing.Point(0, 27);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(940, 47);
+            this.toolStrip2.Size = new System.Drawing.Size(497, 47);
             this.toolStrip2.TabIndex = 1;
             this.toolStrip2.Text = "toolStrip2";
             // 
@@ -357,7 +362,7 @@
             this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSave.Name = "toolStripButtonSave";
             this.toolStripButtonSave.Size = new System.Drawing.Size(44, 44);
-            this.toolStripButtonSave.Text = "toolStripButton11";
+            this.toolStripButtonSave.Text = "Сохранить";
             this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
             // 
             // toolStripButtonUndo
@@ -455,32 +460,52 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.richTextBox2);
+            this.splitContainer1.Panel2.Controls.Add(this.textBoxErrors);
+            this.splitContainer1.Panel2.Controls.Add(this.dataGridViewoutput);
             this.splitContainer1.Size = new System.Drawing.Size(916, 468);
             this.splitContainer1.SplitterDistance = 234;
             this.splitContainer1.TabIndex = 4;
             // 
             // richTextBox1
             // 
-            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox1.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.richTextBox1.Location = new System.Drawing.Point(0, 0);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(916, 234);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
-            // richTextBox2
+            // dataGridViewoutput
             // 
-            this.richTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.richTextBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox2.Location = new System.Drawing.Point(0, 0);
-            this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(916, 230);
-            this.richTextBox2.TabIndex = 0;
-            this.richTextBox2.Text = "";
+            this.dataGridViewoutput.AllowUserToAddRows = false;
+            this.dataGridViewoutput.AllowUserToDeleteRows = false;
+            this.dataGridViewoutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewoutput.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dataGridViewoutput.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.dataGridViewoutput.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dataGridViewoutput.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewoutput.Location = new System.Drawing.Point(0, 2);
+            this.dataGridViewoutput.Name = "dataGridViewoutput";
+            this.dataGridViewoutput.ReadOnly = true;
+            this.dataGridViewoutput.RowHeadersWidth = 51;
+            this.dataGridViewoutput.RowTemplate.Height = 24;
+            this.dataGridViewoutput.Size = new System.Drawing.Size(916, 228);
+            this.dataGridViewoutput.TabIndex = 0;
+            this.dataGridViewoutput.Visible = false;
             // 
-            // Form1
+            // textBoxErrors
+            // 
+            this.textBoxErrors.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxErrors.Location = new System.Drawing.Point(0, 0);
+            this.textBoxErrors.Name = "textBoxErrors";
+            this.textBoxErrors.Size = new System.Drawing.Size(916, 230);
+            this.textBoxErrors.TabIndex = 1;
+            this.textBoxErrors.Text = "";
+            // 
+            // Compiler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -488,9 +513,9 @@
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.toolStrip2);
             this.Controls.Add(this.toolStrip1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Name = "Form1";
-            this.Text = "Compilator";
+            this.Name = "Compiler";
+            this.Text = "Compiler";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.toolStrip2.ResumeLayout(false);
@@ -499,6 +524,7 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewoutput)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -548,7 +574,8 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonSave;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.DataGridView dataGridViewoutput;
+        private System.Windows.Forms.RichTextBox textBoxErrors;
     }
 }
 

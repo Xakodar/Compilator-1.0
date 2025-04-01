@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Laba1
 {
-    public partial class Form1 : Form
+    public partial class Compiler : Form
     {
         private string currentFile = string.Empty;
 
-        public Form1()
+        public Compiler()
         {
             InitializeComponent();
+
         }
 
         /*ФАЙЛ*/
@@ -192,6 +194,13 @@ namespace Laba1
         }
 
 
+        /*ПУСК*/
+
+
+        private void toolStripDropDownButton4_Click(object sender, EventArgs e)
+        {
+            toolStripButtonRun_Click(sender, e);
+        }
 
         /*ПАНЕЛЬ ИНСТРУМЕНТОВ*/
 
@@ -238,7 +247,51 @@ namespace Laba1
 
         private void toolStripButtonRun_Click(object sender, EventArgs e)
         {
-            /*пока пропускаем*/
+            // Получаем исходный код из текстового поля
+            string sourceCode = richTextBox1.Text;
+
+            // Создаем объект сканера и выполняем анализ
+            Scanner scanner = new Scanner();
+            var tokens = scanner.Scan(sourceCode);
+
+            // Очищаем DataGridView
+            dataGridViewoutput.Visible = false;
+            dataGridViewoutput.Rows.Clear();
+            dataGridViewoutput.Columns.Clear();
+
+            // Добавляем столбцы
+            dataGridViewoutput.Columns.Add("colCode", "Код");
+            dataGridViewoutput.Columns.Add("colType", "Тип лексемы");
+            dataGridViewoutput.Columns.Add("colLexeme", "Лексема");
+            dataGridViewoutput  .Columns.Add("colLine", "Строка");
+            dataGridViewoutput.Columns.Add("colStart", "Начальная позиция");
+            dataGridViewoutput.Columns.Add("colEnd", "Конечная позиция");
+
+            // Заполняем DataGridView данными токенов
+            foreach (var token in tokens)
+            {
+                dataGridViewoutput.Rows.Add(
+                    (int)token.Code,
+                    token.Type,
+                    token.Lexeme,
+                    token.Line,
+                    token.StartPos,
+                    token.EndPos
+                );
+            }
+
+            ListParser parser = new ListParser();
+            parser.Parse(sourceCode);
+            textBoxErrors.Visible = true;
+            // Вывод ошибок, обнаруженных парсером, в текстовое поле
+            if (parser.Errors.Any())
+            {
+                textBoxErrors.Text = string.Join(Environment.NewLine, parser.Errors.Select(err => err.ToString()));
+            }
+            else
+            {
+                textBoxErrors.Text = "Ошибок не обнаружено";
+            }
         }
 
         private void toolStripButtonHelp_Click(object sender, EventArgs e)
@@ -249,6 +302,25 @@ namespace Laba1
         private void toolStripButtonAbout_Click(object sender, EventArgs e)
         {
             оПрограммеToolStripMenuItem_Click(sender, e);
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Если в редакторе есть текст (возможно, изменения)
+            if (!string.IsNullOrWhiteSpace(richTextBox1.Text))
+            {
+                DialogResult result = MessageBox.Show(
+                    "Сохранить изменения в текущем документе?",
+                    "Сохранение изменений",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    // Вызываем функцию "Сохранить как" для сохранения изменений
+                    сохранитьКакToolStripMenuItem_Click(sender, e);
+                }
+            }
         }
     }
 }
