@@ -40,3 +40,9 @@
 Диаграмма состояний:
 
 ![схема строки](https://github.com/user-attachments/assets/193b2642-e414-4123-aa49-7ac09c494c40)
+
+
+Граф автомата:
+
+![граф новый](https://github.com/user-attachments/assets/6e45d16a-2d42-45c2-a6e0-41e08748fe38)
+
