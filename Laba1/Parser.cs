@@ -17,7 +17,7 @@ namespace Laba1
 
         public override string ToString()
         {
-            return $"[Позиция {Position}] ' {Message} '";
+            return $" [Позиция {Position}] ' {Message} ' ";
         }
     }
 
@@ -90,7 +90,7 @@ namespace Laba1
         {
             if (!IsLetter(CurrentChar()))
             {
-                AddError("Идентификатор должен начинаться с буквы", CurrentChar());
+                AddError("Идентификатор должен начинаться с английской буквы", CurrentChar());
                 AdvancePos();
                 return;
             }

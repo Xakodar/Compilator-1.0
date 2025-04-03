@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Laba1
@@ -13,7 +12,6 @@ namespace Laba1
         public Compiler()
         {
             InitializeComponent();
-
         }
 
         /*ФАЙЛ*/
@@ -40,7 +38,6 @@ namespace Laba1
                     // Если пользователь отменил, прерываем создание нового файла
                     return;
                 }
-                // Если выбрано "Нет", продолжаем без сохранения изменений
             }
 
             // Открываем диалоговое окно для создания нового файла
@@ -56,7 +53,7 @@ namespace Laba1
                 try
                 {
                     // Физически создаём пустой файл
-                    System.IO.File.WriteAllText(currentFile, "");
+                    File.WriteAllText(currentFile, "");
                     // Очищаем редактор для нового документа
                     richTextBox1.Clear();
                 }
@@ -186,7 +183,7 @@ namespace Laba1
         private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show(
-                "Пока что лабораторная работа №1, но потом будет РГЗ крутое",
+                "Данная программа представляет собой компилятор, в частности лексер, который сканирует строку и разбивает её на лексемы и в случае нахождения ошибки заканчивает сканирование",
                 "О программе",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information
@@ -255,7 +252,8 @@ namespace Laba1
             var tokens = scanner.Scan(sourceCode);
 
             // Очищаем DataGridView
-            dataGridViewoutput.Visible = false;
+            textBoxErrors.Visible = false;
+            dataGridViewoutput.Visible = true;
             dataGridViewoutput.Rows.Clear();
             dataGridViewoutput.Columns.Clear();
 
@@ -280,7 +278,7 @@ namespace Laba1
                 );
             }
 
-            ListParser parser = new ListParser();
+            /*ListParser parser = new ListParser();
             parser.Parse(sourceCode);
             textBoxErrors.Visible = true;
             // Вывод ошибок, обнаруженных парсером, в текстовое поле
@@ -291,7 +289,7 @@ namespace Laba1
             else
             {
                 textBoxErrors.Text = "Ошибок не обнаружено";
-            }
+            }*/
         }
 
         private void toolStripButtonHelp_Click(object sender, EventArgs e)

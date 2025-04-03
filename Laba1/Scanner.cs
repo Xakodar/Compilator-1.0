@@ -3,6 +3,7 @@ using System.Text;
 
 namespace Laba1
 {
+    
     public enum TokenCode
     {
         Integer = 1,        // целое
@@ -14,10 +15,9 @@ namespace Laba1
         LBracket = 7,       // "["
         RBracket = 8,       // "]"
         Semicolon = 9,      // ";"
-        StringLiteral = 10, // "..."
-        Keyword = 11,       // например "List"
-        Plus = 13,
-        String = 14,
+        StringLiteral = 10, // "..." строка
+        Plus = 11,
+        String = 12,
         Error = 99
     }
 
@@ -64,7 +64,6 @@ namespace Laba1
             {
                 char ch = CurrentChar();
 
-                // Используем switch
                 switch (ch)
                 {
                     // Пропускаем незначащие пробелы, табуляцию и переводы строк
@@ -72,19 +71,19 @@ namespace Laba1
                         Advance();
                         break;
 
-                    // Буква - значит начинаем считывать идентификатор (или ключевое слово)
-                    case var c when char.IsLetter(c):
+                    // Буква - значит начинаем считывать идентификатор
+                    case var c when char.IsLetter(c) &&  c >= 65 && c <= 122:
                         ReadIdentifierOrKeyword();
                         break;
 
                     // Минус: может быть частью числа (например, -5 или -2.3)
                     case '-':
-                        AddToken(TokenCode.Minus, "знак минус", "-");
+                        AddToken(TokenCode.Minus, " знак минус ", "-");
                         Advance();
                         break;
 
                     case '+':
-                        AddToken(TokenCode.Plus, "знак плюс", "+");
+                        AddToken(TokenCode.Plus, " знак плюс ", "+");
                         Advance();
                         break;
 
@@ -95,25 +94,25 @@ namespace Laba1
 
                     // Оператор присваивания
                     case '=':
-                        AddToken(TokenCode.AssignOp, "оператор присваивания", "=");
+                        AddToken(TokenCode.AssignOp, " оператор присваивания ", "=");
                         Advance();
                         break;
 
                     // Открывающая скобка
                     case '[':
-                        AddToken(TokenCode.LBracket, "открывающая скобка", "[");
+                        AddToken(TokenCode.LBracket, " открывающая скобка ", "[");
                         Advance();
                         break;
 
                     // Закрывающая скобка
                     case ']':
-                        AddToken(TokenCode.RBracket, "закрывающая скобка", "]");
+                        AddToken(TokenCode.RBracket, " закрывающая скобка ", "]");
                         Advance();
                         break;
 
                     // Запятая
                     case ',':
-                        AddToken(TokenCode.Comma, "запятая", ",");
+                        AddToken(TokenCode.Comma, " запятая ", ",");
                         Advance();
                         break;
 
@@ -125,65 +124,47 @@ namespace Laba1
 
                     // Строка (начинается на ")
                     case '"':
-                        AddToken(TokenCode.String, "кавычка", " '' ");
+                        AddToken(TokenCode.String, " кавычка ", " '' ");
+                        ReadStringLiteral();
                         Advance();
                         break;
 
                     // По умолчанию - недопустимый символ
                     default:
-                        AddToken(TokenCode.Error, "недопустимый символ", ch.ToString());
+                        AddToken(TokenCode.Error, " недопустимый символ ", ch.ToString());
                         Advance();
-                        break;
+                        return _tokens;
                 }
             }
 
             return _tokens;
         }
 
+
         /// <summary>
-        /// Считывание идентификатора или ключевого слова
+        /// Считывание идентификатора
         /// </summary>
         private void ReadIdentifierOrKeyword()
         {
             int startPos = _linePos;
-            StringBuilder sb = new StringBuilder();
-            char c = CurrentChar();
+            var sb = new StringBuilder();
 
-            // Первый символ идентификатора должен быть английской буквой
-            if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')))
+            // Разрешаем только латинские буквы
+            while (!IsEnd() && IsLatinLetter(CurrentChar()))
             {
-                AddToken(TokenCode.Error, "недопустимый символ", c.ToString(), _linePos, _linePos, _line);
+                sb.Append(CurrentChar());
                 Advance();
-                return;
-            }
-            sb.Append(c);
-            Advance();
-
-            while (!IsEnd())
-            {
-                c = CurrentChar();
-                if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || char.IsDigit(c) || c == '_')
-                {
-                    sb.Append(c);
-                    Advance();
-                }
-                else if (char.IsLetter(c))
-                {
-                    // Здесь обработка всех не английских букв
-                    AddToken(TokenCode.Error, "недопустимый символ", c.ToString(), _linePos, _linePos, _line);
-                    Advance();
-                }
-                else
-                {
-                    break;
-                }
             }
 
             string lexeme = sb.ToString();
             if (_keywords.Contains(lexeme))
-                AddToken(TokenCode.Keyword, "ключевое слово", lexeme, startPos, _linePos - 1, _line);
-            else
-                AddToken(TokenCode.Identifier, "идентификатор", lexeme, startPos, _linePos - 1, _line);
+                AddToken(TokenCode.Identifier, " идентификатор ", lexeme, startPos, _linePos - 1, _line);
+        }
+
+        // Метод для проверки, является ли символ латинской буквой
+        private bool IsLatinLetter(char ch)
+        {
+            return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
         }
 
 
@@ -194,7 +175,6 @@ namespace Laba1
         {
             int startPos = _linePos;
             bool hasDot = false;
-            bool hasDigits = false;
 
             StringBuilder sb = new StringBuilder();
 
@@ -211,7 +191,6 @@ namespace Laba1
                 char ch = CurrentChar();
                 if (char.IsDigit(ch))
                 {
-                    hasDigits = true;
                     sb.Append(ch);
                     Advance();
                 }
@@ -237,20 +216,14 @@ namespace Laba1
             }
 
             string numberLexeme = sb.ToString();
-            if (!hasDigits)
-            {
-                // Если не встретили ни одной цифры (например, "-.")
-                AddToken(TokenCode.Error, "ошибка в числе", numberLexeme, startPos, _linePos - 1, _line);
-                return;
-            }
 
             if (hasDot)
             {
-                AddToken(TokenCode.Float, "вещественное число", numberLexeme, startPos, _linePos - 1, _line);
+                AddToken(TokenCode.Float, " вещественное число ", numberLexeme, startPos, _linePos - 1, _line);
             }
             else
             {
-                AddToken(TokenCode.Integer, "целое число", numberLexeme, startPos, _linePos - 1, _line);
+                AddToken(TokenCode.Integer, " целое число ", numberLexeme, startPos, _linePos - 1, _line);
             }
         }
 
@@ -273,6 +246,7 @@ namespace Laba1
                 {
                     // нашли закрывающую кавычку
                     closed = true;
+                    AddToken(TokenCode.String, " закрывающая кавычка ", " '' ");
                     Advance(); // пропускаем закрывающую кавычку
                     break;
                 }
@@ -288,12 +262,12 @@ namespace Laba1
             if (!closed)
             {
                 // Строка не закрылась
-                AddToken(TokenCode.Error, "незакрытая строка", strValue, startPos, _linePos - 1, _line);
+                AddToken(TokenCode.Error, " незакрытая строка ", strValue, startPos, _linePos - 1, _line);
             }
             else
             {
                 // Закрытая строка
-                AddToken(TokenCode.StringLiteral, "строка", strValue, startPos, _linePos - 1, _line);
+                AddToken(TokenCode.StringLiteral, " строка ", strValue, startPos, _linePos - 1, _line);
             }
         }
 
