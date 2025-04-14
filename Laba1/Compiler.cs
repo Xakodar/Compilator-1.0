@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq; 
+using System.Net.NetworkInformation;
 using System.Windows.Forms;
 
 namespace Laba1
@@ -161,22 +163,104 @@ namespace Laba1
             richTextBox1.SelectAll();
         }
 
+        /*ТЕКСТ*/
+
+        private void постановкаЗадачиToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                    "В результате выполнения курсовой работы был разработан синтаксический анализатор (парсер) для объявления списка с инициализацией на языке Python. Целью работы является создание программы, способной правильно анализировать и интерпретировать синтаксис списков с инициализацией в Python, используя грамматику и алгоритм для синтаксического анализа.\n\n" +
+                    "Задача парсера – корректно обработать конструкции, такие как:\n" +
+                    "- объявление списка с числами: [1, 2, 3];\n" +
+                    "- строковые списки: [\"a\", \"b\", \"c\"];\n" +
+                    "- смешанные типы данных: [1, \"apple\", 3.14, True].\n\n" +
+                    "В рамках работы также был реализован механизм диагностики синтаксических ошибок и их нейтрализации.",
+                    "Постановка задачи",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+        }
+
+        private void грамматикаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("1.\t‹List› → ‹Letter›‹I›\r\n2.\t‹I› → ‹Letter›‹I›\r\n3.\t‹I› → ‹=›‹O›\r\n4.\t‹O› → ‹[›‹P›\r\n5.\t‹P› → ‹+|–›‹T›\r\n6.\t‹P› → ‹Digit›‹TR›\r\n7.\t‹P› → ‹”›‹S›\r\n8.\t‹P› → ‹]›‹E›\r\n9.\t‹T› → ‹Digit›‹TR›\r\n10.\t‹TR› → ‹Digit›‹TR›\r\n11.\t‹TR› → ‹,›‹P›\r\n12.\t‹TR› → ‹.›‹F›\r\n13.\t‹TR› → ‹]›‹E›\r\n14.\t‹F› → ‹Digit›‹FR›\r\n15.\t‹FR› → ‹Digit›‹FR›\r\n16.\t‹FR› → ‹,›‹P›\r\n17.\t‹FR› → ‹]›‹E›\r\n18.\t‹S› → ‹Letter | Digit›‹SR›\r\n19.\t‹SR› → ‹Letter | Digit›‹SR›\r\n20.\t‹SR› → ‹”›‹A›\r\n21.\t‹A› → ‹,›‹P›\r\n22.\t‹A› → ‹]›‹E›\r\n23.\t‹E› → ‹;›\r\n•\t‹Digit› → “0” | “1” | “2” | “3” | “4” | “5” | “6” | “7” | “8” | “9”\r\n•\t‹Letter› → “a” | “b” | “c” | ... | “z” | “A” | “B” | “C” | ... | “Z”\r\n", 
+                "Грамматика", 
+                MessageBoxButtons.OK, 
+                MessageBoxIcon.Information);
+        }
+
+        private void классификацияГрамматикиToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Согласно классификации Хомского, грамматика G[‹List›] является автоматной.\r\nПраворекурсивные правила:\r\nПравила, где рекурсивный вызов нетерминала находится в крайней правой позиции, что соответствует форме A → aB.\r\nВ данной грамматике такими являются:\r\n(2) ‹I› → ‹Letter›‹I›\r\n(10) ‹TR› → ‹Digit›‹TR›\r\n(15) ‹FR› → ‹Digit›‹FR›\r\n(19) ‹SR› → ‹Letter | Digit›‹SR›\r\nОстальные правила не содержат рекурсии или завершают цепочку продукций терминальным символом (правило (23) ‹E› → ‹;›).\r\nПоскольку все правила продукции имеют форму либо A → aB, либо A → a, грамматика является праворекурсивной и, следовательно, соответствует автоматной грамматике (регулярной грамматике, тип-3 по классификации Хомского). Это удовлетворяет требованию о том, что все правила должны быть либо леворекурсивными, либо праворекурсивными – в нашем случае они однородно праворекурсивные.\r\n", 
+                "Классификация грамматики", 
+                MessageBoxButtons.OK, 
+                MessageBoxIcon.Information);
+        }
+
+        private void методАнализаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                    "Для синтаксического анализа использован метод, основанный на автоматной грамматике, что позволяет эффективно обрабатывать конструкции объявлений списков. Программа использует праворекурсивные правила грамматики, что делает её достаточно простой и быстрой в выполнении.\n\n" +
+                    "Синтаксический анализатор использует стек и работает по принципу последовательного чтения входной цепочки символов. Если на текущем шаге встречается ошибка, то применяется метод нейтрализации ошибок, при котором некорректный символ или конструкция удаляется из цепочки до тех пор, пока не будет найдено допустимое продолжение.\n\n" +
+                    "Также для повышения устойчивости к ошибкам в процессе разбора были реализованы механизмы для пропуска некорректных данных, что помогает избежать неожиданных сбоев.",
+                    "Метод анализа",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+        }
+
+        private void диагностикаИНейтрализацияОшибокToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                    "Для диагностики синтаксических ошибок используется алгоритм, который анализирует входную строку и ищет места, где структура данных не соответствует ожидаемой грамматике. В случае нахождения ошибки, программа автоматически применяет метод нейтрализации ошибок.\n\n" +
+                    "Метод нейтрализации заключается в удалении символа из текущей цепочки и попытке продолжить анализ с этого момента. Это позволяет корректно обработать ошибочные данные и продолжить выполнение программы. Такой подход позволяет избежать остановки выполнения программы при возникновении ошибок, а также помогает обработать некорректные, но исправляемые данные.",
+                    "Диагностика и нейтрализация ошибок",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+        }
+
+        private void текстовыйПримерToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                    "Пример 1:\nСписок с числами:\n\nlist_example = [1, 2, 3]\n\nРезультат: Синтаксический анализ успешен, программа интерпретирует список как коллекцию целых чисел.\n\n" +
+                    "Пример 2:\nСписок с разными типами данных:\n\nlist_example = [1, \"apple\", 3.14, True]\n\n",
+                    "Тестовый пример",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+        }
+
+        private void списокЛитературыToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "1. Шорников Ю.В. Теория и практика языковых процессоров : учеб. пособие / Ю.В. Шорников. – Новосибирск: Изд-во НГТУ, 2022.\n\n" +
+                "2. Gries D. Designing Compilers for Digital Computers. New York, Jhon Wiley, 1971. 493 p.\n\n" +
+                "3. Теория формальных языков и компиляторов [Электронный ресурс] / Электрон. дан. URL: https://dispace.edu.nstu.ru/didesk/course/show/8594, свободный. Яз.рус. (дата обращения 25.03.2025).\n\n",
+                "Список литературы",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+
+        private void исходныйКодПрограммыToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SourceCodeForm sourceCodeForm = new SourceCodeForm();
+            sourceCodeForm.ShowDialog();
+        }
+
 
         /*СПРАВКА*/
 
 
         private void вызовСправкиToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            string tempPath = Path.Combine(Path.GetTempPath(), "help.html");
+
             try
             {
-                string helpFilePath = Path.Combine(Application.StartupPath, "help.html");
-
-                // Запускаем браузер по умолчанию с этим файлом
-                Process.Start(helpFilePath);
+                // Сохраняем встроенный HTML в файл
+                File.WriteAllText(tempPath, Properties.Resources.help);
+                // Открываем в браузере
+                Process.Start(new ProcessStartInfo(tempPath) { UseShellExecute = true });
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Не удалось открыть файл справки: " + ex.Message);
+                MessageBox.Show("Не удалось открыть файл \"Грамматика\": " + ex.Message);
             }
         }
 
@@ -278,9 +362,10 @@ namespace Laba1
                 );
             }
 
-            /*ListParser parser = new ListParser();
+            ListParser parser = new ListParser();
             parser.Parse(sourceCode);
             textBoxErrors.Visible = true;
+            dataGridViewoutput.Visible = false;
             // Вывод ошибок, обнаруженных парсером, в текстовое поле
             if (parser.Errors.Any())
             {
@@ -289,7 +374,7 @@ namespace Laba1
             else
             {
                 textBoxErrors.Text = "Ошибок не обнаружено";
-            }*/
+            }
         }
 
         private void toolStripButtonHelp_Click(object sender, EventArgs e)

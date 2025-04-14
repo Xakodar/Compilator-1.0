@@ -74,6 +74,7 @@ namespace Laba1
                     // Буква - значит начинаем считывать идентификатор
                     case var c when char.IsLetter(c) &&  c >= 65 && c <= 122:
                         ReadIdentifierOrKeyword();
+                        Advance();
                         break;
 
                     // Минус: может быть частью числа (например, -5 или -2.3)
@@ -133,7 +134,7 @@ namespace Laba1
                     default:
                         AddToken(TokenCode.Error, " недопустимый символ ", ch.ToString());
                         Advance();
-                        return _tokens;
+                        break;
                 }
             }
 
@@ -158,7 +159,11 @@ namespace Laba1
 
             string lexeme = sb.ToString();
             if (_keywords.Contains(lexeme))
+                AddToken(TokenCode.Identifier, " ключевое слово ", lexeme, startPos, _linePos - 1, _line);
+            else
+            {
                 AddToken(TokenCode.Identifier, " идентификатор ", lexeme, startPos, _linePos - 1, _line);
+            }
         }
 
         // Метод для проверки, является ли символ латинской буквой
