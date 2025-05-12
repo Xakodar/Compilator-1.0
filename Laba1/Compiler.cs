@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq; 
 using System.Net.NetworkInformation;
 using System.Windows.Forms;
+using TetradApp;
 
 namespace Laba1
 {
@@ -328,7 +330,7 @@ namespace Laba1
 
         private void toolStripButtonRun_Click(object sender, EventArgs e)
         {
-            // Получаем исходный код из текстового поля
+            /*// Получаем исходный код из текстового поля
             string sourceCode = richTextBox1.Text;
 
             // Создаем объект сканера и выполняем анализ
@@ -374,7 +376,53 @@ namespace Laba1
             else
             {
                 textBoxErrors.Text = "Ошибок не обнаружено";
+            }*/
+            // сброс подсветки
+            richTextBox1.SelectAll();
+            richTextBox1.SelectionBackColor = Color.White;
+            textBoxErrors.Clear();
+
+            var lexer = new Lexer(richTextBox1.Text);
+            lexer.Tokenize();
+            foreach (var le in lexer.Errors)
+            {
+                richTextBox1.Select(le.Position, le.Length);
+                richTextBox1.SelectionBackColor = Color.Yellow;
+                textBoxErrors.AppendText($"Лексическая ошибка: {le.Message} (позиц. {le.Position})\r\n");
             }
+
+            if (lexer.Errors.Any())
+            {
+                textBoxErrors.Focus();
+                return;
+            }
+
+            var parser = new Parser(lexer.Tokens);
+            parser.Parse();
+            foreach (var se in parser.Errors)
+            {
+                richTextBox1.Select(se.Position, se.Length);
+                richTextBox1.SelectionBackColor = Color.LightPink;
+                textBoxErrors.AppendText($"Синтаксическая ошибка: {se.Message} (позиц. {se.Position})\r\n");
+            }
+
+            if (parser.Errors.Any())
+            {
+                textBoxErrors.Focus();
+                dataGridViewoutput.Rows.Clear();  // не выводим тетрады
+                return;
+            }
+
+            // если ошибок нет — выводим тетрады
+            dataGridViewoutput.Columns.Clear();
+            dataGridViewoutput.Columns.Add("op", "op");
+            dataGridViewoutput.Columns.Add("arg1", "arg1");
+            dataGridViewoutput.Columns.Add("arg2", "arg2");
+            dataGridViewoutput.Columns.Add("result", "result");
+            dataGridViewoutput.Rows.Clear();
+
+            foreach (var q in parser.Quads)
+                dataGridViewoutput.Rows.Add(q.Op, q.Arg1, q.Arg2, q.Result);
         }
 
         private void toolStripButtonHelp_Click(object sender, EventArgs e)
@@ -404,6 +452,18 @@ namespace Laba1
                     сохранитьКакToolStripMenuItem_Click(sender, e);
                 }
             }
+        }
+
+        private void buttonTethrads_Click(object sender, EventArgs e)
+        {
+            textBoxErrors.Visible = false;
+            dataGridViewoutput.Visible = true;
+        }
+
+        private void buttonErrors_Click(object sender, EventArgs e)
+        {
+            dataGridViewoutput.Visible = false;
+            textBoxErrors.Visible = true;
         }
     }
 }

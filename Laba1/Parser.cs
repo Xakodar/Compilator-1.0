@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -247,4 +247,233 @@ public class ListParser
 
     private bool IsDigit(char c)
         => (c >= '0' && c <= '9');
+}
+*/
+
+using System;
+using System.Collections.Generic;
+
+namespace TetradApp
+{
+    public class Quad
+    {
+        public string Op { get; }
+        public string Arg1 { get; }
+        public string Arg2 { get; }
+        public string Result { get; }
+
+        public Quad(string op, string a1, string a2, string res)
+        {
+            Op = op;
+            Arg1 = a1;
+            Arg2 = a2;
+            Result = res;
+        }
+    }
+
+    public class SyntaxError
+    {
+        public string Message { get; }
+        public int Position { get; }
+        public int Length { get; }
+
+        public SyntaxError(string msg, int pos, int len)
+        {
+            Message = msg;
+            Position = pos;
+            Length = len;
+        }
+    }
+
+    public class Parser
+    {
+        private readonly List<Token> _tokens;
+        private int _pos;
+        private int _tempCount;
+
+        public List<Quad> Quads { get; } = new List<Quad>();
+        public List<SyntaxError> Errors { get; } = new List<SyntaxError>();
+        private Token Peek(int offset) => (_pos + offset) < _tokens.Count ? _tokens[_pos + offset] : new Token(TokenType.End, string.Empty, _pos + offset);
+
+        private Token Current => _tokens[_pos];
+
+        public Parser(List<Token> tokens)
+        {
+            _tokens = tokens;
+            _pos = 0;
+            _tempCount = 0;
+        }
+
+        private void Advance()
+        {
+            if (_pos < _tokens.Count - 1)
+                _pos++;
+        }
+
+        private bool Match(TokenType expected)
+        {
+            if (Current.Type == expected)
+            {
+                Advance();
+                return true;
+            }
+            Errors.Add(new SyntaxError(
+                $"Ожидался «{expected}», а встретилось «{Current.Lexeme}»",
+                Current.Position,
+                Current.Lexeme.Length));
+            return false;
+        }
+
+        private string NewTemp() => "t" + (++_tempCount);
+
+        public void Parse()
+        {
+            ParseStatement();
+            if (Current.Type != TokenType.End)
+            {
+                Errors.Add(new SyntaxError(
+                    $"Лишний токен «{Current.Lexeme}» после конца оператора",
+                    Current.Position,
+                    Current.Lexeme.Length));
+            }
+        }
+
+        private void ParseStatement()
+        {
+            // Assignment: id = expr
+            if (Current.Type == TokenType.Identifier && Peek(1).Type == TokenType.Assign)
+            {
+                var id = Current.Lexeme;
+                Advance(); // id
+                Advance(); // =
+                var exprRes = ParseE();
+                if (string.IsNullOrEmpty(exprRes))
+                {
+                    Errors.Add(new SyntaxError(
+                        "Ожидалось выражение после «=»",
+                        Current.Position,
+                        Current.Lexeme.Length));
+                }
+                else
+                {
+                    Quads.Add(new Quad("=", exprRes, string.Empty, id));
+                }
+            }
+            // Unexpected closing parenthesis at top-level
+            else if (Current.Type == TokenType.RParen)
+            {
+                Errors.Add(new SyntaxError(
+                    "Неправильная закрывающая скобка без соответствующей открывающей",
+                    Current.Position,
+                    Current.Lexeme.Length));
+                Advance();
+            }
+            else
+            {
+                // Regular expression
+                _ = ParseE();
+            }
+        }
+
+        private string ParseE()
+        {
+            if (Current.Type == TokenType.RParen)
+            {
+                Errors.Add(new SyntaxError(
+                    "Неправильная закрывающая скобка без соответствующей открывающей",
+                    Current.Position,
+                    Current.Lexeme.Length));
+                Advance();
+                return string.Empty;
+            }
+
+            if (Current.Type == TokenType.Plus || Current.Type == TokenType.Minus ||
+                Current.Type == TokenType.Mul ||  Current.Type == TokenType.Div)
+            {
+                // Operator without left operand
+                Errors.Add(new SyntaxError(
+                    $"Ожидался идентификатор или «(» перед «{Current.Lexeme}»",
+                    Current.Position,
+                    Current.Lexeme.Length));
+                Advance();
+            }
+
+            var t = ParseT();
+            return ParseA(t);
+        }
+
+        private string ParseA(string inh)
+        {
+            while (Current.Type == TokenType.Plus || Current.Type == TokenType.Minus)
+            {
+                var op = Current.Lexeme;
+                Advance();
+                var t2 = ParseT();
+                var res = NewTemp();
+                Quads.Add(new Quad(op, inh, t2, res));
+                inh = res;
+            }
+            return inh;
+        }
+
+        private string ParseT()
+        {
+            var o = ParseO();
+            return ParseB(o);
+        }
+        private string ParseB(string inh)
+        {
+            while (Current.Type == TokenType.Mul || Current.Type == TokenType.Div)
+            {
+                var op = Current.Lexeme;
+                Advance();
+                var o2 = ParseO();
+                var res = NewTemp();
+                Quads.Add(new Quad(op, inh, o2, res));
+                inh = res;
+            }
+            return inh;
+        }
+
+        private string ParseO()
+        {
+            if (Current.Type == TokenType.Identifier)
+            {
+                var id = Current.Lexeme;
+                Advance();
+                return id;
+            }
+            if (Current.Type == TokenType.LParen)
+            {
+                var pos = Current.Position;
+                Advance();
+                var e = ParseE();
+                if (!Match(TokenType.RParen))
+                {
+                    Errors.Add(new SyntaxError(
+                        "Отсутствует закрывающая скобка «)»",
+                        pos,
+                        1));
+                }
+                return e;
+            }
+            if (Current.Type == TokenType.RParen)
+            {
+                Errors.Add(new SyntaxError(
+                    "Неправильная закрывающая скобка без соответствующей открывающей",
+                    Current.Position,
+                    Current.Lexeme.Length));
+                Advance();
+                return string.Empty;
+            }
+
+            // Unexpected token
+            Errors.Add(new SyntaxError(
+                $"Непредвиденный токен «{Current.Lexeme}», ожидался идентификатор или «(»",
+                Current.Position,
+                Current.Lexeme.Length));
+            Advance();
+            return string.Empty;
+        }
+    }
 }

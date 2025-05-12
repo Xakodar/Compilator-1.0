@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿/*using System.Collections.Generic;
 using System.Text;
 
 namespace Laba1
@@ -322,4 +322,98 @@ namespace Laba1
 
         #endregion
     }
+}*/
+
+
+using System;
+using System.Collections.Generic;
+
+namespace TetradApp
+{
+    public enum TokenType
+    {
+        Plus, Assign, Minus, Mul, Div, LParen, RParen, Identifier, End
+    }
+
+    public class Token
+    {
+        public TokenType Type { get; }
+        public string Lexeme { get; }
+        public int Position { get; }
+
+        public Token(TokenType type, string lexeme, int pos)
+        {
+            Type = type;
+            Lexeme = lexeme;
+            Position = pos;
+        }
+    }
+
+    public class LexicalError
+    {
+        public string Message { get; }
+        public int Position { get; }
+        public int Length { get; }
+
+        public LexicalError(string msg, int pos, int len)
+        {
+            Message = msg;
+            Position = pos;
+            Length = len;
+        }
+    }
+
+    public class Lexer
+    {
+        private readonly string _input;
+        private int _idx;
+
+        public List<Token> Tokens { get; } = new List<Token>();
+        public List<LexicalError> Errors { get; } = new List<LexicalError>();
+
+        public Lexer(string input)
+        {
+            _input = input;
+            _idx = 0;
+        }
+
+        public void Tokenize()
+        {
+            while (_idx < _input.Length)
+            {
+                char c = _input[_idx];
+                if (char.IsWhiteSpace(c))
+                {
+                    _idx++;
+                    continue;
+                }
+                if (char.IsLetter(c))
+                {
+                    int start = _idx;
+                    while (_idx < _input.Length && char.IsLetter(_input[_idx]))
+                        _idx++;
+                    string lex = _input.Substring(start, _idx - start);
+                    Tokens.Add(new Token(TokenType.Identifier, lex, start));
+                    continue;
+                }
+
+                switch (c)
+                {
+                    case '+': Tokens.Add(new Token(TokenType.Plus, "+", _idx)); break;
+                    case '-': Tokens.Add(new Token(TokenType.Minus, "-", _idx)); break;
+                    case '*': Tokens.Add(new Token(TokenType.Mul, "*", _idx)); break;
+                    case '/': Tokens.Add(new Token(TokenType.Div, "/", _idx)); break;
+                    case '(': Tokens.Add(new Token(TokenType.LParen, "(", _idx)); break;
+                    case ')': Tokens.Add(new Token(TokenType.RParen, ")", _idx)); break;
+                    case '=': Tokens.Add(new Token(TokenType.Assign, "=", _idx)); break;  // <-- добавили
+                    default:
+                        Errors.Add(new LexicalError($"Недопустимый символ '{c}'", _idx, 1));
+                        break;
+                }
+                _idx++;
+            }
+            Tokens.Add(new Token(TokenType.End, string.Empty, _idx));
+        }
+    }
 }
+

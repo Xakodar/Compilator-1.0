@@ -73,6 +73,8 @@
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.textBoxErrors = new System.Windows.Forms.RichTextBox();
             this.dataGridViewoutput = new System.Windows.Forms.DataGridView();
+            this.buttonTethrads = new System.Windows.Forms.Button();
+            this.buttonErrors = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
             this.toolStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -94,7 +96,7 @@
             this.toolStripDropDownButton5});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(370, 27);
+            this.toolStrip1.Size = new System.Drawing.Size(331, 31);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -107,7 +109,7 @@
             this.сохранитьКакToolStripMenuItem,
             this.выходToolStripMenuItem});
             this.menuFile.Name = "menuFile";
-            this.menuFile.Size = new System.Drawing.Size(59, 24);
+            this.menuFile.Size = new System.Drawing.Size(59, 28);
             this.menuFile.Text = "Файл";
             // 
             // создатьToolStripMenuItem
@@ -159,7 +161,7 @@
             this.pravka.Image = ((System.Drawing.Image)(resources.GetObject("pravka.Image")));
             this.pravka.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.pravka.Name = "pravka";
-            this.pravka.Size = new System.Drawing.Size(74, 24);
+            this.pravka.Size = new System.Drawing.Size(74, 28);
             this.pravka.Text = "Правка";
             // 
             // отменитьToolStripMenuItem
@@ -226,7 +228,7 @@
             this.Tekst.Image = ((System.Drawing.Image)(resources.GetObject("Tekst.Image")));
             this.Tekst.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Tekst.Name = "Tekst";
-            this.Tekst.Size = new System.Drawing.Size(59, 24);
+            this.Tekst.Size = new System.Drawing.Size(59, 28);
             this.Tekst.Text = "Текст";
             // 
             // постановкаЗадачиToolStripMenuItem
@@ -291,7 +293,7 @@
             this.toolStripDropDownButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton4.Image")));
             this.toolStripDropDownButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton4.Name = "toolStripDropDownButton4";
-            this.toolStripDropDownButton4.Size = new System.Drawing.Size(45, 24);
+            this.toolStripDropDownButton4.Size = new System.Drawing.Size(45, 28);
             this.toolStripDropDownButton4.Text = "Пуск";
             this.toolStripDropDownButton4.Click += new System.EventHandler(this.toolStripDropDownButton4_Click);
             // 
@@ -304,20 +306,20 @@
             this.toolStripDropDownButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton5.Image")));
             this.toolStripDropDownButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton5.Name = "toolStripDropDownButton5";
-            this.toolStripDropDownButton5.Size = new System.Drawing.Size(81, 24);
+            this.toolStripDropDownButton5.Size = new System.Drawing.Size(81, 28);
             this.toolStripDropDownButton5.Text = "Справка";
             // 
             // вызовСправкиToolStripMenuItem
             // 
             this.вызовСправкиToolStripMenuItem.Name = "вызовСправкиToolStripMenuItem";
-            this.вызовСправкиToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.вызовСправкиToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
             this.вызовСправкиToolStripMenuItem.Text = "Вызов справки";
             this.вызовСправкиToolStripMenuItem.Click += new System.EventHandler(this.вызовСправкиToolStripMenuItem_Click);
             // 
             // оПрограммеToolStripMenuItem
             // 
             this.оПрограммеToolStripMenuItem.Name = "оПрограммеToolStripMenuItem";
-            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
             this.оПрограммеToolStripMenuItem.Text = "О программе";
             this.оПрограммеToolStripMenuItem.Click += new System.EventHandler(this.оПрограммеToolStripMenuItem_Click);
             // 
@@ -468,10 +470,12 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.buttonErrors);
+            this.splitContainer1.Panel2.Controls.Add(this.buttonTethrads);
             this.splitContainer1.Panel2.Controls.Add(this.textBoxErrors);
             this.splitContainer1.Panel2.Controls.Add(this.dataGridViewoutput);
-            this.splitContainer1.Size = new System.Drawing.Size(916, 468);
-            this.splitContainer1.SplitterDistance = 234;
+            this.splitContainer1.Size = new System.Drawing.Size(916, 556);
+            this.splitContainer1.SplitterDistance = 265;
             this.splitContainer1.TabIndex = 4;
             // 
             // richTextBox1
@@ -480,7 +484,7 @@
             this.richTextBox1.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.richTextBox1.Location = new System.Drawing.Point(0, 0);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(916, 234);
+            this.richTextBox1.Size = new System.Drawing.Size(916, 265);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
@@ -489,7 +493,7 @@
             this.textBoxErrors.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxErrors.Location = new System.Drawing.Point(0, 0);
             this.textBoxErrors.Name = "textBoxErrors";
-            this.textBoxErrors.Size = new System.Drawing.Size(916, 230);
+            this.textBoxErrors.Size = new System.Drawing.Size(916, 287);
             this.textBoxErrors.TabIndex = 1;
             this.textBoxErrors.Text = "";
             // 
@@ -509,18 +513,39 @@
             this.dataGridViewoutput.ReadOnly = true;
             this.dataGridViewoutput.RowHeadersWidth = 51;
             this.dataGridViewoutput.RowTemplate.Height = 24;
-            this.dataGridViewoutput.Size = new System.Drawing.Size(916, 228);
+            this.dataGridViewoutput.Size = new System.Drawing.Size(916, 314);
             this.dataGridViewoutput.TabIndex = 0;
             this.dataGridViewoutput.Visible = false;
+            // 
+            // buttonTethrads
+            // 
+            this.buttonTethrads.Location = new System.Drawing.Point(703, 5);
+            this.buttonTethrads.Name = "buttonTethrads";
+            this.buttonTethrads.Size = new System.Drawing.Size(100, 24);
+            this.buttonTethrads.TabIndex = 2;
+            this.buttonTethrads.Text = "Тетрады";
+            this.buttonTethrads.UseVisualStyleBackColor = true;
+            this.buttonTethrads.Click += new System.EventHandler(this.buttonTethrads_Click);
+            // 
+            // buttonErrors
+            // 
+            this.buttonErrors.Location = new System.Drawing.Point(809, 5);
+            this.buttonErrors.Name = "buttonErrors";
+            this.buttonErrors.Size = new System.Drawing.Size(104, 23);
+            this.buttonErrors.TabIndex = 3;
+            this.buttonErrors.Text = "Ошибки";
+            this.buttonErrors.UseVisualStyleBackColor = true;
+            this.buttonErrors.Click += new System.EventHandler(this.buttonErrors_Click);
             // 
             // Compiler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(940, 570);
+            this.ClientSize = new System.Drawing.Size(940, 658);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.toolStrip2);
             this.Controls.Add(this.toolStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Compiler";
             this.Text = "Компилятор";
@@ -585,6 +610,8 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.DataGridView dataGridViewoutput;
         private System.Windows.Forms.RichTextBox textBoxErrors;
+        private System.Windows.Forms.Button buttonTethrads;
+        private System.Windows.Forms.Button buttonErrors;
     }
 }
 
