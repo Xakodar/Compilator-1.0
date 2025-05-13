@@ -34,6 +34,3 @@
 ![изображение](https://github.com/user-attachments/assets/bd0608aa-3204-408b-9ba3-bab4f3be16d0)
 
 ![изображение](https://github.com/user-attachments/assets/5afe7477-9123-431a-8e75-afbe11ac7daf)
-
-
-
