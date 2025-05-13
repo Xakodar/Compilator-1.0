@@ -71,10 +71,10 @@
             this.toolStripButtonAbout = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.buttonErrors = new System.Windows.Forms.Button();
+            this.buttonTethrads = new System.Windows.Forms.Button();
             this.textBoxErrors = new System.Windows.Forms.RichTextBox();
             this.dataGridViewoutput = new System.Windows.Forms.DataGridView();
-            this.buttonTethrads = new System.Windows.Forms.Button();
-            this.buttonErrors = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
             this.toolStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -96,7 +96,7 @@
             this.toolStripDropDownButton5});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(331, 31);
+            this.toolStrip1.Size = new System.Drawing.Size(331, 27);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -109,7 +109,7 @@
             this.сохранитьКакToolStripMenuItem,
             this.выходToolStripMenuItem});
             this.menuFile.Name = "menuFile";
-            this.menuFile.Size = new System.Drawing.Size(59, 28);
+            this.menuFile.Size = new System.Drawing.Size(59, 24);
             this.menuFile.Text = "Файл";
             // 
             // создатьToolStripMenuItem
@@ -161,7 +161,7 @@
             this.pravka.Image = ((System.Drawing.Image)(resources.GetObject("pravka.Image")));
             this.pravka.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.pravka.Name = "pravka";
-            this.pravka.Size = new System.Drawing.Size(74, 28);
+            this.pravka.Size = new System.Drawing.Size(74, 24);
             this.pravka.Text = "Правка";
             // 
             // отменитьToolStripMenuItem
@@ -228,7 +228,7 @@
             this.Tekst.Image = ((System.Drawing.Image)(resources.GetObject("Tekst.Image")));
             this.Tekst.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Tekst.Name = "Tekst";
-            this.Tekst.Size = new System.Drawing.Size(59, 28);
+            this.Tekst.Size = new System.Drawing.Size(59, 24);
             this.Tekst.Text = "Текст";
             // 
             // постановкаЗадачиToolStripMenuItem
@@ -293,7 +293,7 @@
             this.toolStripDropDownButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton4.Image")));
             this.toolStripDropDownButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton4.Name = "toolStripDropDownButton4";
-            this.toolStripDropDownButton4.Size = new System.Drawing.Size(45, 28);
+            this.toolStripDropDownButton4.Size = new System.Drawing.Size(45, 24);
             this.toolStripDropDownButton4.Text = "Пуск";
             this.toolStripDropDownButton4.Click += new System.EventHandler(this.toolStripDropDownButton4_Click);
             // 
@@ -306,7 +306,7 @@
             this.toolStripDropDownButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton5.Image")));
             this.toolStripDropDownButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton5.Name = "toolStripDropDownButton5";
-            this.toolStripDropDownButton5.Size = new System.Drawing.Size(81, 28);
+            this.toolStripDropDownButton5.Size = new System.Drawing.Size(81, 24);
             this.toolStripDropDownButton5.Text = "Справка";
             // 
             // вызовСправкиToolStripMenuItem
@@ -488,6 +488,26 @@
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
+            // buttonErrors
+            // 
+            this.buttonErrors.Location = new System.Drawing.Point(809, 5);
+            this.buttonErrors.Name = "buttonErrors";
+            this.buttonErrors.Size = new System.Drawing.Size(104, 23);
+            this.buttonErrors.TabIndex = 3;
+            this.buttonErrors.Text = "Ошибки";
+            this.buttonErrors.UseVisualStyleBackColor = true;
+            this.buttonErrors.Visible = false;
+            // 
+            // buttonTethrads
+            // 
+            this.buttonTethrads.Location = new System.Drawing.Point(703, 5);
+            this.buttonTethrads.Name = "buttonTethrads";
+            this.buttonTethrads.Size = new System.Drawing.Size(100, 24);
+            this.buttonTethrads.TabIndex = 2;
+            this.buttonTethrads.Text = "Тетрады";
+            this.buttonTethrads.UseVisualStyleBackColor = true;
+            this.buttonTethrads.Visible = false;
+            // 
             // textBoxErrors
             // 
             this.textBoxErrors.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -516,26 +536,6 @@
             this.dataGridViewoutput.Size = new System.Drawing.Size(916, 314);
             this.dataGridViewoutput.TabIndex = 0;
             this.dataGridViewoutput.Visible = false;
-            // 
-            // buttonTethrads
-            // 
-            this.buttonTethrads.Location = new System.Drawing.Point(703, 5);
-            this.buttonTethrads.Name = "buttonTethrads";
-            this.buttonTethrads.Size = new System.Drawing.Size(100, 24);
-            this.buttonTethrads.TabIndex = 2;
-            this.buttonTethrads.Text = "Тетрады";
-            this.buttonTethrads.UseVisualStyleBackColor = true;
-            this.buttonTethrads.Click += new System.EventHandler(this.buttonTethrads_Click);
-            // 
-            // buttonErrors
-            // 
-            this.buttonErrors.Location = new System.Drawing.Point(809, 5);
-            this.buttonErrors.Name = "buttonErrors";
-            this.buttonErrors.Size = new System.Drawing.Size(104, 23);
-            this.buttonErrors.TabIndex = 3;
-            this.buttonErrors.Text = "Ошибки";
-            this.buttonErrors.UseVisualStyleBackColor = true;
-            this.buttonErrors.Click += new System.EventHandler(this.buttonErrors_Click);
             // 
             // Compiler
             // 

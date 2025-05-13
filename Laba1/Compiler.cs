@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq; 
 using System.Net.NetworkInformation;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using TetradApp;
 
@@ -12,10 +13,24 @@ namespace Laba1
     public partial class Compiler : Form
     {
         private string currentFile = string.Empty;
+        private static readonly Regex PassportRx = new Regex(@"\b\d{4}[-\s]?\d{6}\b");
+        private static readonly Regex CommentRx = new Regex(@"(?s)(\"""".*?\""""|'''.*?''')", RegexOptions.Singleline);
+        private static readonly Regex HslRx = new Regex(@"\bhsl\(\s*(?:3[0-5]\d|360|[12]?\d{1,2})\s*,\s*(?:100|[1-9]?\d)%\s*,\s*(?:100|[1-9]?\d)%\s*\)");
 
         public Compiler()
         {
             InitializeComponent();
+            SetupGrid();
+            richTextBox1.TextChanged += (s, e) => ClearHighlights();
+        }
+
+        private void SetupGrid()
+        {
+            dataGridViewoutput.Columns.Clear();
+            dataGridViewoutput.Columns.Add("Type", "Тип");
+            dataGridViewoutput.Columns.Add("Match", "Совпадение");
+            dataGridViewoutput.Columns.Add("Position", "Позиция");
+            dataGridViewoutput.Columns.Add("Valid", "Корректность");
         }
 
         /*ФАЙЛ*/
@@ -377,6 +392,9 @@ namespace Laba1
             {
                 textBoxErrors.Text = "Ошибок не обнаружено";
             }*/
+
+            /*5 лаба*/
+            /*
             // сброс подсветки
             richTextBox1.SelectAll();
             richTextBox1.SelectionBackColor = Color.White;
@@ -423,6 +441,32 @@ namespace Laba1
 
             foreach (var q in parser.Quads)
                 dataGridViewoutput.Rows.Add(q.Op, q.Arg1, q.Arg2, q.Result);
+            */
+      
+            /* 6 лаба */
+            SetupGrid();
+            string text = richTextBox1.Text;
+            textBoxErrors.Visible = false;
+            dataGridViewoutput.Visible = true;
+
+            Search(PassportRx, "Паспорт", ValidatePassport);
+            Search(CommentRx, "PY-коммент", s => HasBalancedQuotes(s) && s.Length > 6);
+            Search(HslRx, "HSL-код", ValidateHsl);
+            
+        }
+
+        private void Search(Regex rx, string type, Func<string, bool> validator)
+        {
+            foreach (Match m in rx.Matches(richTextBox1.Text))
+            {
+                bool ok = validator?.Invoke(m.Value) ?? true;
+                dataGridViewoutput.Rows.Add(type, m.Value, m.Index, ok ? "✔" : "✖");
+                if (ok)
+                {
+                    richTextBox1.Select(m.Index, m.Length);
+                    richTextBox1.SelectionBackColor = Color.Yellow;
+                }
+            }
         }
 
         private void toolStripButtonHelp_Click(object sender, EventArgs e)
@@ -454,7 +498,7 @@ namespace Laba1
             }
         }
 
-        private void buttonTethrads_Click(object sender, EventArgs e)
+        /*private void buttonTethrads_Click(object sender, EventArgs e)
         {
             textBoxErrors.Visible = false;
             dataGridViewoutput.Visible = true;
@@ -464,6 +508,41 @@ namespace Laba1
         {
             dataGridViewoutput.Visible = false;
             textBoxErrors.Visible = true;
+        }*/
+
+        private void ClearHighlights()
+        {
+            int selStart = richTextBox1.SelectionStart;
+            richTextBox1.SelectAll();
+            richTextBox1.SelectionBackColor = Color.White;
+            richTextBox1.Select(selStart, 0);
+        }
+
+        // Passport: проверяем, что серия и номер не начинаются с '0'
+        private bool ValidatePassport(string s)
+        {
+            var d = s.Replace(" ", "").Replace("-", "");
+            return d.Length == 10 && d[0] != '0' && d[4] != '0';
+        }
+
+        // Python-коммент: тройные кавычки должны быть в начале и конце
+        private bool HasBalancedQuotes(string s)
+        {
+            return (s.StartsWith("\"\"\"") && s.EndsWith("\"\"\""))
+                || (s.StartsWith("'''") && s.EndsWith("'''"));
+        }
+
+        // HSL: парсим числа и проверяем диапазоны
+        private bool ValidateHsl(string s)
+        {
+            var inside = s.Substring(s.IndexOf('(') + 1).TrimEnd(')');
+            var p = inside.Split(',');
+            if (p.Length != 3) return false;
+            if (!int.TryParse(p[0], out int h)) return false;
+            if (!int.TryParse(p[1].TrimEnd('%'), out int sat)) return false;
+            if (!int.TryParse(p[2].TrimEnd('%'), out int lum)) return false;
+            return (h >= 0 && h <= 360) && (sat >= 0 && sat <= 100) && (lum >= 0 && lum <= 100);
+
         }
     }
 }
